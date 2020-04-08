@@ -1,4 +1,6 @@
 module.exports = {
+  dest: 'dist',
+  base: '/interviewBooks/',
   title: '面试宝典',
   description: '把面试的知识点整合一遍',
   themeConfig: {
