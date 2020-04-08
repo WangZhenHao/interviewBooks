@@ -1,6 +1,6 @@
 ---
 home: true
 #heroImage: /ts-logo.png
-actionText: 开始学习(travis) →
+actionText: 开始学习 →
 actionLink: /css/
 ---
