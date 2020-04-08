@@ -2,6 +2,11 @@ language: node_js
 node_js:
   - 12.16.1
 
+install:
+  - npm install
+script:
+  - npm run build
+
 deploy:
   local_dir: dist/
   provider: pages
@@ -14,10 +19,3 @@ deploy:
 cache:
   directories:
   - node_modules
-
-before_script:
-  - npm install
-
-script:
-  - npm run build
-
