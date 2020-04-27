@@ -11,7 +11,8 @@ module.exports = {
         collapsable: false,
         children: [
           'css/',
-          'css/bfc'
+          'css/bfc',
+          'css/css3'
         ]
       },
       {
