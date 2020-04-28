@@ -102,6 +102,7 @@ flex-basis属性定义了在分配多余空间之前，项目占据的主轴空�
     flex-basis:<length> | auto ; /*default auto*/
 }
 ```
+
 flex属性是flex-grow，flex-shrink和flex-basis的简写，默认值为0 1 auto。后面两个属性可选
 ```
 .item {

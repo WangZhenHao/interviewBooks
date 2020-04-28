@@ -50,7 +50,9 @@ module.exports = {
         title: 'tcp',
         collapsable: false,
         children: [
-          'tcp/'
+          'tcp/',
+          'tcp/proxy',
+          'tcp/security'
         ]
       }
     ]
