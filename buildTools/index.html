@@ -8,7 +8,7 @@
     <meta name="generator" content="VuePress 1.4.0">
     
     
-    <link rel="preload" href="/interviewBooks/assets/css/0.styles.d08aa1ef.css" as="style"><link rel="preload" href="/interviewBooks/assets/js/app.45f0fdcd.js" as="script"><link rel="preload" href="/interviewBooks/assets/js/2.137860e2.js" as="script"><link rel="preload" href="/interviewBooks/assets/js/6.f9ce6bf3.js" as="script"><link rel="prefetch" href="/interviewBooks/assets/js/10.3a441eb1.js"><link rel="prefetch" href="/interviewBooks/assets/js/11.02f1b534.js"><link rel="prefetch" href="/interviewBooks/assets/js/12.71134809.js"><link rel="prefetch" href="/interviewBooks/assets/js/13.257dd037.js"><link rel="prefetch" href="/interviewBooks/assets/js/14.5ec3d7bc.js"><link rel="prefetch" href="/interviewBooks/assets/js/15.e72337ed.js"><link rel="prefetch" href="/interviewBooks/assets/js/16.542a5da1.js"><link rel="prefetch" href="/interviewBooks/assets/js/17.1f45f07d.js"><link rel="prefetch" href="/interviewBooks/assets/js/18.27c6a2e1.js"><link rel="prefetch" href="/interviewBooks/assets/js/19.121fee5a.js"><link rel="prefetch" href="/interviewBooks/assets/js/20.79fa7859.js"><link rel="prefetch" href="/interviewBooks/assets/js/3.0291c494.js"><link rel="prefetch" href="/interviewBooks/assets/js/4.7a4d83b2.js"><link rel="prefetch" href="/interviewBooks/assets/js/5.954045cc.js"><link rel="prefetch" href="/interviewBooks/assets/js/7.660ffae4.js"><link rel="prefetch" href="/interviewBooks/assets/js/8.5bf308b6.js"><link rel="prefetch" href="/interviewBooks/assets/js/9.b3dbaf1e.js">
+    <link rel="preload" href="/interviewBooks/assets/css/0.styles.d08aa1ef.css" as="style"><link rel="preload" href="/interviewBooks/assets/js/app.e6264f65.js" as="script"><link rel="preload" href="/interviewBooks/assets/js/2.137860e2.js" as="script"><link rel="preload" href="/interviewBooks/assets/js/6.b8422bad.js" as="script"><link rel="prefetch" href="/interviewBooks/assets/js/10.3a441eb1.js"><link rel="prefetch" href="/interviewBooks/assets/js/11.02f1b534.js"><link rel="prefetch" href="/interviewBooks/assets/js/12.71134809.js"><link rel="prefetch" href="/interviewBooks/assets/js/13.257dd037.js"><link rel="prefetch" href="/interviewBooks/assets/js/14.5ec3d7bc.js"><link rel="prefetch" href="/interviewBooks/assets/js/15.e72337ed.js"><link rel="prefetch" href="/interviewBooks/assets/js/16.542a5da1.js"><link rel="prefetch" href="/interviewBooks/assets/js/17.1f45f07d.js"><link rel="prefetch" href="/interviewBooks/assets/js/18.27c6a2e1.js"><link rel="prefetch" href="/interviewBooks/assets/js/19.121fee5a.js"><link rel="prefetch" href="/interviewBooks/assets/js/20.79fa7859.js"><link rel="prefetch" href="/interviewBooks/assets/js/3.0291c494.js"><link rel="prefetch" href="/interviewBooks/assets/js/4.7a4d83b2.js"><link rel="prefetch" href="/interviewBooks/assets/js/5.954045cc.js"><link rel="prefetch" href="/interviewBooks/assets/js/7.660ffae4.js"><link rel="prefetch" href="/interviewBooks/assets/js/8.5bf308b6.js"><link rel="prefetch" href="/interviewBooks/assets/js/9.b3dbaf1e.js">
     <link rel="stylesheet" href="/interviewBooks/assets/css/0.styles.d08aa1ef.css">
   </head>
   <body>
@@ -62,6 +62,21 @@ export default {
    props: ['num']
 }
 
+</code></pre></div><ul><li>5.UMD
+UMD 叫做通用模块定义规范（Universal Module Definition）它没有自己专有的规范，是集结了 CommonJs、CMD、AMD 的规范于一身</li></ul> <div class="language- extra-class"><pre class="language-text"><code>((root, factory) =&gt; {
+    if (typeof define === 'function' &amp;&amp; define.amd) {
+        //AMD
+        define(['jquery'], factory);
+    } else if (typeof exports === 'object') {
+        //CommonJS
+        var $ = requie('jquery');
+        module.exports = factory($);
+    } else {
+        root.testModule = factory(root.jQuery);
+    }
+})(this, ($) =&gt; {
+    //todo
+});
 </code></pre></div><h3 id="_2-npm包发布命令"><a href="#_2-npm包发布命令" class="header-anchor">#</a> 2.npm包发布命令</h3> <div class="language- extra-class"><pre class="language-text"><code>npm publish --registry http://registry.npmjs.org
 </code></pre></div><h3 id="_3-webpack中的externals"><a href="#_3-webpack中的externals" class="header-anchor">#</a> 3.webpack中的externals</h3> <p>防止将某些 import 的包(package)打包到 bundle 中，而是在运行时(runtime)再去从外部获取这些扩展依赖(external dependencies)</p> <div class="language- extra-class"><pre class="language-text"><code>externals: {
   'weixin-js-sdk': 'wx'
@@ -75,6 +90,6 @@ export default {
       </a>
       →
     </span></p></div> </main></div><div class="global-ui"></div></div>
-    <script src="/interviewBooks/assets/js/app.45f0fdcd.js" defer></script><script src="/interviewBooks/assets/js/2.137860e2.js" defer></script><script src="/interviewBooks/assets/js/6.f9ce6bf3.js" defer></script>
+    <script src="/interviewBooks/assets/js/app.e6264f65.js" defer></script><script src="/interviewBooks/assets/js/2.137860e2.js" defer></script><script src="/interviewBooks/assets/js/6.b8422bad.js" defer></script>
   </body>
 </html>
