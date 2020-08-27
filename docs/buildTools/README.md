@@ -82,6 +82,25 @@ export default {
 
 ```
 
+- 5.UMD
+UMD 叫做通用模块定义规范（Universal Module Definition）它没有自己专有的规范，是集结了 CommonJs、CMD、AMD 的规范于一身
+```
+((root, factory) => {
+    if (typeof define === 'function' && define.amd) {
+        //AMD
+        define(['jquery'], factory);
+    } else if (typeof exports === 'object') {
+        //CommonJS
+        var $ = requie('jquery');
+        module.exports = factory($);
+    } else {
+        root.testModule = factory(root.jQuery);
+    }
+})(this, ($) => {
+    //todo
+});
+```
+
 ### 2.npm包发布命令
 ```
 npm publish --registry http://registry.npmjs.org
