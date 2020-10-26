@@ -21,7 +21,9 @@ module.exports = {
         children: [
           'javascript/',
           'javascript/basicWriteExam',
-          'javascript/algorithmExam'
+          'javascript/algorithmExam',
+          'javascript/es6',
+          'javascript/typeScript'
         ]
       },
       {
@@ -35,7 +37,8 @@ module.exports = {
         title: '前端构建工具',
         collapsable: false,
         children: [
-          'buildTools/'
+          'buildTools/',
+          'buildTools/git'
         ]
       },
       {
@@ -52,7 +55,8 @@ module.exports = {
         children: [
           'tcp/',
           'tcp/proxy',
-          'tcp/security'
+          'tcp/security',
+          'tcp/http'
         ]
       }
     ]
