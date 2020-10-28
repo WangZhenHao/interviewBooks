@@ -26,3 +26,11 @@
 505：HTTP Version not supported (HTTP 版本不受支持)
 
 ```
+### 2.http响应头信息
+```
+Content-Type: 表示后面的文档属于什么MIME类型。Servlet默认为text/plain，但通常需要显式地指定为text/html。由于经常要设置Content-Type，因此HttpServletResponse提供了一个专用的方法setContentType。
+text/plain ：纯文本格式,
+application/json： JSON数据格式,
+application/x-www-form-urlencoded ： <form encType=””>中默认的encType，form表单数据被编码为key/value格式发送到服务器（表单默认的提交数据的格式）
+Last-Modified: 文档的最后改动时间。客户可以通过If-Modified-Since请求头提供一个日期，该请求将被视为一个条件GET，只有改动时间迟于指定时间的文档才会返回，否则返回一个304（Not Modified）状态。Last-Modified也可用setDateHeader方法来设置。
+```

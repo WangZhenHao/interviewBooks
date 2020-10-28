@@ -115,3 +115,5 @@ externals: {
   'weixin-js-sdk': 'wx'
 }
 ```
+
+### 4.webpack性能优化

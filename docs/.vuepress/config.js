@@ -12,7 +12,8 @@ module.exports = {
         children: [
           'css/',
           'css/bfc',
-          'css/css3'
+          'css/css3',
+          'css/compatible'
         ]
       },
       {

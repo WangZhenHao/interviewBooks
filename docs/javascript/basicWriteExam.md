@@ -72,3 +72,43 @@ function sort(arrList) {
 
 console.log(sort(arr))
 ```
+
+### 4.设置 a的值让条件 "a == 5 && a == 8"
+
+```
+var a = {
+  index: 1,
+  toString: function() {
+    if(a.index === 1) {
+      a.index++
+      return 5
+    } else {
+      return 8
+    }
+  }
+}
+console.log(a == 5 && a == 8)
+
+```
+
+总结：valueOf偏向于运算，toString偏向于显示。
+1、 在进行强转字符串类型时将优先调用toString方法，强转为数字时优先调用valueOf。
+2、 在有运算操作符的情况下，valueOf的优先级高于toString。
+
+### 5.根据下面代码写出三次弹框内容
+```
+ function test(a, b) {
+   alert(b)
+   return {
+     test: function(c, a) {
+       return test(c, a)
+     }
+   }
+ }
+```
+|code | 第一次alert | 第二次alert | 第三次alert |
+|--- | --- | --- | --- |
+| var a = test(100, 200); a.test(300); a.test(400) | 200 | undefined | undefined |
+| var b = test(101).test(201).test(401) | undefiend  | undefiend  | undefined |
+| var c = test(102).test(202, 302); c.test() | undefiend | 302 | undefined  |
+
