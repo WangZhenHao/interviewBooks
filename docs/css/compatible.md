@@ -13,7 +13,7 @@ value = value.replace(/\-/g, "/");
 
 ### 2.禁止图片点击放大
 部分安卓手机点击图片会放大，如需要禁止放大，只需要设置css属性
-```
+```css
 img{ 
     pointer-events: none; 
 } 
@@ -21,7 +21,7 @@ img{
 
 ### 3.上下拉动滚动条时卡顿、慢
 
-```
+```css
 body {
 -webkit-overflow-scrolling: touch;
 overflow-scrolling: touch;
@@ -29,7 +29,7 @@ overflow-scrolling: touch;
 ```
 
 ### 4.清除button,input,a标签的默认样式
-```
+```css
 a:hover, a:active,button,input:focus{
   outline: none;
   border: none;
@@ -38,7 +38,7 @@ a:hover, a:active,button,input:focus{
 
 ### 5.获取 scrollTop 通过 document.documentElement.scrollTop 兼容非chrome浏览器
 
-```
+```js
  var scrollTop = document.documentElement.scrollTop||document.body.scrollTop;
 
 ```

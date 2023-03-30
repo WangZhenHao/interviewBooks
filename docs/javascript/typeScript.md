@@ -1,7 +1,7 @@
 # typeScript考点
 
 ### 1:Typescript有哪些基础类型？
-```
+```js
 1：number
 
 2：string

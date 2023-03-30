@@ -2,7 +2,7 @@
 
 ### 1.编写一个数组去重的方法
 
-```
+```js
 // 方法一：
 var arr = [1,3,43,43,45,1,3]
 var obj = {}
@@ -26,7 +26,7 @@ for(var i = 1, len = arr.length; i < len; i++) {
 
 ### 2.二分法查找
 
-```
+```js
 var ary=[1,4,7,8,12]
 function getIndex(arr, num) {
   var start = 0;
@@ -55,7 +55,7 @@ console.log(getIndex(ary, 0.1))
 
 ### 3.冒泡排序
 
-```
+```js
 var arr = [8, 6, 5, 9, 1, 4, 3];
 function sort(arrList) {
   for(var i = 0, len = arrList.length; i < len; i++) {
@@ -75,7 +75,7 @@ console.log(sort(arr))
 
 ### 4.设置 a的值让条件 "a == 5 && a == 8"
 
-```
+```js
 var a = {
   index: 1,
   toString: function() {
@@ -96,7 +96,7 @@ console.log(a == 5 && a == 8)
 2、 在有运算操作符的情况下，valueOf的优先级高于toString。
 
 ### 5.根据下面代码写出三次弹框内容
-```
+```js
  function test(a, b) {
    alert(b)
    return {
