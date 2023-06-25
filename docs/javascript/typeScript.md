@@ -60,17 +60,57 @@ Typescript是一种面向对象的Javascript语言，和其他任何面向对象
 
 ```
 
-### 4.说说接口和类型别名type的区别？
+### 4.说说接口interface和类型别名type的区别？
+
+- type可以定义基本类型别名, 但是interface无法定义
+```js
+type userName = string
+type stuNo = number
 ```
-他们很相似，type可以作用于原始值，联合类型，元组以及其它任何你需要手写的类型。
+- type可以使用typeof获取实例类型
+```js
+let div = document.createElement('div');
+type B = typeof div
+```
 
-区别一：它并不会真的创建一个新的名字，当你在编译器上将鼠标悬停在定义为该类型别名定义的变量上时返回的是该类型别名引用的对象。
-相反，接口会创建一个新名字 ，当你把鼠标悬停在该接口定义的变量上时返回的是该接口名。
+- type可以声明联合类型
+```js
+type Student = {stuNo: number} | {classId: number}
+```
 
-区别二：类型别名不能extends和implements
+- type可以声明 元组类型
+```js
+type Data = [number, string];
+```
 
-区别三：对于元组，联合类型我们一般使用类型别名type。
+- interface可以声明合并
+```js
+interface Person { name: string }
+interface Person { age: number }
+let user: Person = {
+    name: "Tolu",
+    age: 0,
+};
 
+// 这种情况下，如果是type的话，重复使用Person是会报错的：
+type Person { name: string };  
+// Error: 标识符“Person”重复。ts(2300)
+type Person { age: number }
+```
+
+- type继承通过&， interface继承通过extends 
+```js
+// type 继承 interface
+type Person{
+    name:string
+}
+type Student = Person & { stuNo: number }
+
+// interface 继承 type
+type Person{
+    name:string
+}
+interface Student extends Person { stuNo: number }
 ```
 
 ### 5.TypeScript联合类型
