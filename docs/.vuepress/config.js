@@ -57,7 +57,8 @@ module.exports = {
           'tcp/',
           'tcp/proxy',
           'tcp/security',
-          'tcp/http'
+          'tcp/http',
+          'tcp/eventLoop'
         ]
       }
     ]
