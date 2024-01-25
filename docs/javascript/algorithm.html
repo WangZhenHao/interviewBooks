@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            // 1 add(1);
+            // 3 add(1)(2);
+            // 6 add(1)(2)(3)；
+            // 6 add(1)(2, 3);
+            // 6 add(1, 2)(3);
+            // 6 add(1, 2, 3);
+
+            // function add() {
+
+            // }
+            function add(){
+                let _outer = [...arguments];
+                let fn = function(){
+                    let _inner = [...arguments];
+                    return add.apply(null, _outer.concat(_inner));
+                }
+            
+                fn.toString = function(){
+                    return _outer.reduce((a,b)=>a+b);
+                }
+            
+                return fn;
+            }
+
+            console.log(`${add(1)}`) // 1
+            // add(1)(2);  // 3
+            // add(1)(2)(3)； // 6
+            // add(1)(2)(3)(4)； // 10
+        </script>
+    </body>
+</html>
