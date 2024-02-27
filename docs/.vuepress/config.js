@@ -65,7 +65,8 @@ module.exports = {
         title: '面试记录',
         collapsable: false,
         children: [
-          'data/eventLoop'
+          'data/eventLoop',
+          "data/interview202301"
         ]
       }
     ]

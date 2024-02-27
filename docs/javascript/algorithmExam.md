@@ -41,3 +41,54 @@ for (let i=0;i<n;i++) {
     }
 }
 ```
+
+### 什么是防抖和节流？有什么区别？如何实现？
+
+- 防抖——触发高频事件后 n 秒后函数只会执行一次，如果 n 秒内高频事件再
+次被触发，则重新计算时间；
+```js
+function debounce (fn, wait) {
+      var timer = null;
+      return function () {
+        var context = this
+        var args = arguments
+        if (timer) {
+          clearTimeout(timer);
+          timer = null;
+        }
+        timer = setTimeout(function () {
+          fn.apply(context, args)
+        }, wait)
+      }
+    }
+
+```
+
+- 节流——高频事件触发，但在 n 秒内只会执行一次，所以节流会稀释函数的执
+行频率。
+```js
+function throttle (fn, interval) {
+      var _self = fn,
+        timer,
+        firstTime = true,
+        _interval = interval || 500;
+
+
+      return function () {
+        var agr = arguments,
+          me = this;
+        if (firstTime) {
+          _self.apply(me, agr);
+          firstTime = false;
+        }
+        if (timer) {
+          return false;
+        }
+        timer = setTimeout(function () {
+          clearTimeout(timer)
+          timer = null;
+          _self.apply(me, agr);
+        }, _interval)
+      }
+    }
+```
