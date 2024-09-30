@@ -31,7 +31,7 @@
 
 高阶函数（Higher-order Function）是指可以接受一个或多个函数作为参数，并且可以返回一个函数作为结果的函数。在函数式编程中，高阶函数是一个非常重要的概念，它可以帮助我们将代码写得更加简洁、灵活和可复用。
 
-## 讲一下PPromise和async/await
+## 讲一下Promise和async/await
 
 Promise和async/await都是JavaScript中处理异步操作的工具。
 
