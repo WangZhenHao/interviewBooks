@@ -1,5 +1,86 @@
 # 20240929 面试
 
+## react 面试提
+
+### useCallback 和 useMemo 的使用场景 
+useCallback 和 useMemo 可以用来缓存函数和变量，提高性能，减少资源浪费。但并不是所有的函数和变量都需要用这两者来实现，他也有对应的使用场景。
+
+- useCallback 可以缓存函数体，在依赖项没有变化时，前后两次渲染时，使用的函数体是一样的。它的使用场景是：
+
+函数作为其他 hook 的依赖项时（如在 useEffect()中）；
+函数作为 React.memo()（或 shouldComponentUpdate ）中的组件的 props；
+主要是为了避免重新生成的函数，会导致其他 hook 或组件的不必要刷新。
+
+```js
+function ProductPage({ productId, referrer, theme }) {
+  // Tell React to cache your function between re-renders...
+  const handleSubmit = useCallback((orderDetails) => {
+    post('/product/' + productId + '/buy', {
+      referrer,
+      orderDetails,
+    });
+  }, [productId, referrer]); // ...so as long as these dependencies don't change...
+
+  return (
+    <div className={theme}>
+      {/* ...ShippingForm will receive the same props and can skip re-rendering */}
+      <ShippingForm onSubmit={handleSubmit} />
+    </div>
+  );
+}
+```
+
+- useMemo 用来缓存函数执行的结果。如每次渲染时都要执行一段很复杂的运算，或者一个变量需要依赖另一个变量的运算结果，就都可以使用 useMemo()。
+
+### 为什么在本地开发时，组件会渲染两次？
+
+在 React.StrictMode 模式下，如果用了 useState,usesMemo,useReducer 之类的 Hook，React 会故意渲染两次，为的就是将一些不容易发现的错误容易暴露出来，同时 React.StrictMode 在正式环境中不会重复渲染。
+
+也就是在测试环境的严格模式下，才会渲染两次。
+
+## 说说浏览器缓存机制
+
+### 强缓存
+
+强缓存允许浏览器直接使用缓存中的资源，而不与服务器进行任何通信，直到缓存过期。浏览器可以通过以下两种HTTP头来控制强缓存：
+
+1、Expires：
+指定资源的过期时间，表示在指定时间点之前，资源可以直接从缓存中获取。格式如下：
+```
+Expires: Wed, 21 Oct 2025 07:28:00 GMT
+```
+
+2、 Cache-Control
+这是现代浏览器最常用的缓存控制头，指定资源在多少秒内有效，使用相对时间（从资源请求的时间开始计时
+```
+Cache-Control: max-age=3600
+```
+
+Expires 和 Cache-Control 两者对比
+
+其实这两者差别不大，区别就在于 Expires 是 http1.0 的产物，Cache-Control 是 http1.1 的产物，两者同时存在的话，Cache-Control 优先级高于 Expires；在某些不支持 HTTP1.1 的环境下，Expires 就会发挥用处。所以 Expires 其实是过时的产物，现阶段它的存在只是一种兼容性的写法。
+
+强缓存判断是否缓存的依据来自于是否超出某个时间或者某个时间段，而不关心服务器端文件是否已经更新，这可能会导致加载文件不是服务器端最新的内容，那我们如何获知服务器端内容是否已经发生了更新呢？此时我们需要用到协商缓存策略。
+
+### 协商缓存
+协商缓存就是强制缓存失效后，浏览器携带缓存标识向服务器发起请求，由服务器根据缓存标识决定是否使用缓存的过程，主要有以下两种情况：
+
+Last-Modified 和 If-Modified-Since：
+
+- Last-Modified：当服务器返回资源时，会标记该资源最后一次修改的时间。
+
+- ETag 和 If-None-Match：
+
+### Cache-Control 其他常用指令
+
+- no-cache：表示浏览器每次都必须与服务器协商资源的有效性，不能直接使用缓存资源，但如果服务器确认资源未修改，浏览器仍然可以使用缓存。
+
+- no-store：禁止浏览器和中间代理服务器缓存任何内容，所有资源必须每次都从服务器获取
+
+- public：允许任何缓存服务器（包括浏览器和中间代理）缓存该资源，通常用于不涉及敏感数据的资源。
+
+- private：仅允许浏览器缓存资源，中间代理服务器不能缓存，适用于用户相关的数据。
+
 ## 讲一讲垃圾回收机制?
 
 浏览器的垃圾回收机制主要用于管理内存，自动释放不再使用的对象，以防止内存泄漏和优化性能。
