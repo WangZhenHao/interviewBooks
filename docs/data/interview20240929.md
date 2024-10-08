@@ -24,7 +24,7 @@ Prettier：用于统一代码的格式和风格。
 
 整合方案：通过 eslint-config-prettier 和 eslint-plugin-prettier 来解决两者的冲突，让 ESLint 专注于代码质量检查，Prettier 专注于代码格式化。
 
-## react 面试提
+## react 面试题
 
 ### useEffect 使用场景
 - 数据获取（API 调用）
