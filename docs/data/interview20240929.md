@@ -1,6 +1,43 @@
 # 20240929 面试
 
+## eslint 和prettierrc 的关系
+
+1. ESLint 
+作用：主要用于检查 JavaScript/TypeScript 代码的语法和逻辑错误，帮助开发者避免常见的代码问题。ESLint 通过定义一系列规则来检查代码，例如未使用的变量、潜在的 bug 等。
+
+代码格式化方面：虽然 ESLint 也有一些代码风格相关的规则（如缩进、引号、行末分号等），但其主要目的并非格式化代码，而是强调代码质量和潜在错误检测。
+
+2. Prettier
+作用：Prettier 是一个专注于代码格式化的工具，它可以自动格式化代码，以确保代码的一致性。它不检查逻辑错误，而是按照配置的风格（如缩进、换行规则、引号类型等）将代码格式化。
+
+专注点：Prettier 的规则范围很小，更多是格式化层面的规则，比如代码换行、空格、引号使用等，它不会对代码的实际逻辑进行检查。
+
+ESLint：用于检查代码中的潜在问题和逻辑错误。
+
+Prettier：用于统一代码的格式和风格。
+
+### 如何整合 ESLint 和 Prettier
+
+- eslint-config-prettier 会关闭 ESLint 中与代码格式相关的规则，让 Prettier 负责格式化部分。
+
+- eslint-plugin-prettier 会将 Prettier 作为 ESLint 规则的一部分，让 ESLint 来检查 Prettier 的格式问题。
+
+整合方案：通过 eslint-config-prettier 和 eslint-plugin-prettier 来解决两者的冲突，让 ESLint 专注于代码质量检查，Prettier 专注于代码格式化。
+
 ## react 面试提
+
+### useEffect 使用场景
+- 数据获取（API 调用）
+
+- 订阅与取消订阅
+
+- 副作用清理 用于管理资源，如定时器、订阅、手动 DOM 修改等。例如，设置并清除定时器：
+
+- 依赖项变化时执行
+
+- 组件挂载与卸载时执行逻辑
+
+总的来说，useEffect 是处理副作用的主要工具，常用于 API 调用、事件订阅/取消、数据同步和管理生命周期的逻辑。
 
 ### useCallback 和 useMemo 的使用场景 
 useCallback 和 useMemo 可以用来缓存函数和变量，提高性能，减少资源浪费。但并不是所有的函数和变量都需要用这两者来实现，他也有对应的使用场景。
