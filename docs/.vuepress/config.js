@@ -65,6 +65,7 @@ module.exports = {
         title: '面试记录',
         collapsable: false,
         children: [
+          "data/interview20260306",
           "data/interview20240929",
           'data/interview20240117',
           "data/interview202301"
