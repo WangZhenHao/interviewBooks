@@ -1,4 +1,81 @@
-# next.js 面试题
+# 20260306面试准备
+
+## 代码题
+
+实现一个 requestScheduler 函数，假设有 10 个请求任务，但为了性能，要求同时执行的任务数不能超过 2 个。当其中一个完成后，自动补位执行下一个，直到全部完成。
+
+```js
+
+async function requestScheduler(requests) {  
+  let limit = 2;
+  let poolList = []
+  for(let i = 0; i < requests.length; i++) {
+    const p = request().then(() => {
+      // 2. 任务完成后，从执行池中移除自己
+      poolList.splice(poolList.indexOf(p), 1);
+    });
+    poolList.push(pool)
+
+    if(poolList.length >= limit) {
+      await Promise.race(poolList)
+    }
+  }
+
+  await Promise.all(poolList)
+}
+
+```
+
+## react的生命周期
+
+```
+Mounting（挂载）
+Updating（更新）
+Unmounting（卸载）
+
+创建组件
+↓
+Mounting
+↓
+Updating（可能多次）
+↓
+Unmounting
+```
+
+## 为什么 Hooks 不能写在 if 里面？
+React Hooks 不是通过变量名管理 state，而是通过：调用顺序
+
+```js
+// React 内部实现类似这样：
+let hookIndex = 0
+
+function useState() {
+  const state = hooks[hookIndex]
+  hookIndex++
+}
+
+```
+
+React Hooks 是通过 调用顺序来管理 state 的。
+如果 Hooks 写在 if、for 等条件语句中，就可能导致 每次渲染调用顺序不一致。
+React 就无法正确匹配对应的 state，从而导致 状态错乱。
+所以 React 要求 Hooks 必须写在 组件顶层。
+
+## 为什么 React setState / useState 是异步的？
+
+1. 提高性能
+如果每次 setState 都立即更新并重新渲染，会非常慢。
+
+```js
+setCount(1)
+setCount(2)
+setCount(3)
+
+如果是同步更新：会触发 3次渲染。所以 React 会先 收集更新，然后一次性执行。
+```
+
+React 的 setState / useState 并不是立即更新 state，而是通过 调度机制进行批量更新。
+这样可以把多次 state 更新合并成一次渲染，提高性能。同时 React16 之后引入 Fiber 架构，可以根据任务优先级进行调度，避免长时间阻塞 UI。因此 React 采用了这种异步更新策略。
 
 ## 1.什么是 React Server Components
 组件在服务器运行
@@ -83,6 +160,7 @@ NestJS 的装饰器例如 @Controller、@Get、@Body 本质上都是在类或方
 
 ## 怎么理解NestJS 请求生命周期顺序
 
+```
 Middleware
 ↓
 Guard
@@ -98,6 +176,7 @@ Service
 Interceptor (after)
 ↓
 Response
+```
 
 1: 用一个真实请求来理解
 
