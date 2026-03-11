@@ -1,5 +1,221 @@
 # 20260306面试准备
 
+
+## 什么事MCP
+MCP 通常指 Model Context Protocol，是 AI 领域最近很火的一个协议。
+MCP 是让 AI 可以像插件一样调用工具、访问数据的一种标准协议。
+
+如：用户输入的文本
+
+AI：无法访问你的数据库
+
+AI：无法读取你的文件
+
+AI：无法调用API
+
+如果想让 AI：
+
+查数据库
+
+读本地文件
+
+调用 GitHub
+
+控制 IDE
+
+开发者必须：
+
+自己写一堆 API glue code
+
+每个 AI 工具都要重新集成一次。
+
+|      | AI Plugin | MCP  |
+| ---- | --------- | ---- |
+| 标准   | 各家不同      | 统一协议 |
+| 连接方式 | API       | 工具协议 |
+| 生态   | 分散        | 统一   |
+
+
+## Cursor,和Claude 有哪些优缺点？
+Cursor 是基于 Visual Studio Code 改的，所以开发体验非常完整。
+
+比如可以：
+
+直接改整个项目
+
+AI 自动理解项目结构
+
+自动改多个文件
+
+自动生成代码
+
+- 缺点
+
+有时候改代码太“激进”
+Cursor 有时候会：
+
+改很多文件
+
+改错逻辑
+
+破坏代码结构
+
+- Claude 的优缺点
+
+超强代码理解能力
+
+Claude 在代码理解方面非常强。
+
+尤其：
+
+大型代码
+
+架构分析
+
+代码解释
+
+比如你丢 5000 行代码，它依然能理解。
+
+- 缺点
+
+不能直接运行代码
+
+不像 Cursor：
+
+Cursor 可以直接改项目
+
+Claude 只能给代码
+
+
+## 为什么 React 要从 Stack Reconciler 升级到 Fiber？
+
+Stack Reconciler 是同步递归的，无法中断，导致大组件树渲染时页面卡顿；Fiber 让渲染变成可中断、可调度的任务。
+
+React 在 React 16 引入了 Fiber 架构，把递归调用
+变成可暂停的任务
+
+|       | Stack Reconciler | Fiber |
+| ----- | ---------------- | ----- |
+| 渲染方式  | 递归               | 链表    |
+| 执行方式  | 同步               | 可中断   |
+| 任务拆分  | ❌                | ✅     |
+| 优先级调度 | ❌                | ✅     |
+| 并发渲染  | ❌                | ✅     |
+
+
+Stack Reconciler 使用同步递归，一旦开始渲染必须执行完，无法中断，
+当组件树很大时会长时间占用主线程，导致页面卡顿。
+
+Fiber 将组件树转换成链表结构，把渲染拆分为可中断的小任务，
+并引入调度机制和优先级系统，使 React 可以在浏览器空闲时继续渲染，
+从而提升用户体验。
+
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React</title>
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      // The core library code --- // zustand
+      const create = (createState) => {
+        let state;
+        const listeners = new Set();
+
+        const set = (partial) => {
+          const nextPartial =
+            typeof partial === 'function' ? partial(state) : partial;
+          state = { ...state, ...nextPartial };
+          listeners.forEach((listener) => listener());
+        };
+        debugger
+        state = createState(set);
+
+        const useStore = () => {
+          const [, setState] = useState(0);
+          useEffect(() => {
+            const forceUpdate = () => setState((c) => c + 1);
+            listeners.add(forceUpdate);
+            return () => {
+              listeners.delete(forceUpdate);
+            };
+          }, []);
+          return state;
+        };
+
+        return useStore;
+      };
+
+      const useBearStore = create((set) => ({
+        bears: 0,
+        honey: 10,
+        increaseBears: () => set((state) => {
+          debugger
+          return { bears: state.bears + 1 }
+        }),
+        increaseHoney: () => set((state) => ({ honey: state.honey + 1 })),
+      }));
+
+      function BearCounter() {
+        const { bears, increaseBears } = useBearStore('increaseBears');
+        console.log('BearCounter re-rendered');
+        return (
+          <div>
+            <h1>Bears: {bears}</h1>
+            <button onClick={increaseBears}>Increase Bears</button>
+          </div>
+        );
+      }
+
+      function HoneyPot() {
+        const { honey, increaseHoney } = useBearStore();
+        console.log('HoneyPot re-rendered');
+        return (
+          <div>
+            <h2>Honey: {honey}</h2>
+            <button onClick={increaseHoney}>Increase Honey</button>
+          </div>
+        );
+      }
+
+      function App() {
+        console.log('App re-rendered');
+        return (
+          <div>
+            <BearCounter />
+            <hr />
+            <HoneyPot />
+          </div>
+        );
+      }
+
+      const container = document.getElementById('root');
+      const root = ReactDOM.createRoot(container);
+      root.render(<App />);
+    </script>
+  </body>
+</html>
+
+
+```
+
 ## 代码题
 
 实现一个 requestScheduler 函数，假设有 10 个请求任务，但为了性能，要求同时执行的任务数不能超过 2 个。当其中一个完成后，自动补位执行下一个，直到全部完成。
@@ -390,4 +606,63 @@ Compilation 模块会被 Compiler 用来创建新的 compilation 对象（或新
 	</script>
 </body>
 </html>
+```
+
+
+## nextjs 性能优化
+
+- 1. 选择正确的渲染策略
+
+| 渲染方式 | 作用     |
+| ---- | ------ |
+| CSR  | 客户端渲染  |
+| SSR  | 服务端渲染  |
+| SSG  | 静态生成   |
+| ISR  | 增量静态生成 |
+
+
+- 2. 代码分割
+
+动态组件加载
+
+```js
+import dynamic from 'next/dynamic'
+
+const Chart = dynamic(() => import('./Chart'), {
+  ssr: false
+})
+
+减少首屏 JS
+按需加载组件
+```
+
+- 3. 缓存优化
+Next.js 支持 多层缓存。
+
+```js
+1.HTTP Cache:
+
+Cache-Control: s-maxage=60
+
+2: API Cache
+
+fetch(url, {
+  next: { revalidate: 60 }
+})
+
+```
+
+- 4. 减少 JS 体积
+Tree Shaking,删除未使用代码。
+
+- 5. 优化数据请求
+瀑布流请求
+
+- 6. CDN 加速
+
+静态资源,可以直接 CDN 缓存。
+```
+JS
+CSS
+Image
 ```

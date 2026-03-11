@@ -81,6 +81,52 @@
 
 vite通过启动web服务，将静态资源打包到内存中，然后通过浏览器访问，从而实现了按需编译。
 
+## ts中的infer
+
+infer 是 TypeScript 条件类型里的一个关键字，作用是：
+
+在类型匹配过程中“推断（infer）出一个类型”并把它取出来使用。
+
+```ts
+// 推断函数返回值类型
+type GetReturnType<T> =
+  T extends (...args: any[]) => infer R ? R : never
+
+function test() {
+  return 123
+}
+
+type A = GetReturnType<typeof test>
+
+// 实际上：
+type A = number
+
+
+// 还可以推断 参数列表。
+type MyParameters<T> =
+  T extends (...args: infer P) => any
+    ? P
+    : never
+
+function test(a: string, b: number) {}
+
+type A = MyParameters<typeof test>
+
+// 结果是 
+[string, number]
+
+// infer 推断 Promise，实现 Awaited
+type MyAwaited<T> =
+  T extends Promise<infer R>
+    ? R
+    : T
+
+type A = MyAwaited<Promise<string>>
+
+// 结果是：
+string
+
+```
 
 ## 说说什么Typescript中的泛型？作用是什么？
 ```
