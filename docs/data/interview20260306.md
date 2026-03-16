@@ -1,6 +1,236 @@
 # 20260306面试准备
 
 
+## react组件之前怎么🧑通讯
+
+1. 父子通信：通过 props 传递数据。
+
+2. 子父通信：父组件传递回调函数，子组件调用。
+
+3. 兄弟组件通信：通过父组件作为中间层共享状态。
+
+兄弟组件一般通过 父组件中转。ChildA → Parent → ChildB
+
+```js
+function Parent() {
+  const [msg, setMsg] = useState("")
+
+  return (
+    <>
+      <ChildA setMsg={setMsg} />
+      <ChildB msg={msg} />
+    </>
+  )
+}
+```
+
+
+4. 跨层级通信：使用 Context API。
+当组件层级很深时，可以使用 Context API。
+
+```js
+const ThemeContext = React.createContext()
+
+function App() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <Child />
+    </ThemeContext.Provider>
+  )
+}
+
+function Child() {
+  const theme = useContext(ThemeContext)
+  return <div>{theme}</div>
+}
+```
+
+
+5. 全局状态管理：使用 Redux、Zustand 等状态管理库。
+
+
+6. Ref 通信：父组件通过 ref 调用子组件方法。
+
+Ref / Imperative Handle,父组件可以通过 ref 调用子组件方法。
+```js
+const Child = forwardRef((props, ref) => {
+  useImperativeHandle(ref, () => ({
+    focus() {
+      console.log("focus")
+    }
+  }))
+})
+
+function Parent() {
+  const ref = useRef()
+
+  return (
+    <>
+      <Child ref={ref} />
+      <button onClick={() => ref.current.focus()}>
+        click
+      </button>
+    </>
+  )
+}
+```
+
+## 什么是链表？
+
+链表（Linked List）是一种线性数据结构，由多个节点（Node）组成，每个节点包含两部分：数据（data）、指向下一个节点的指针（next）
+
+
+```
+class Node {
+  constructor(value) {
+    this.value = value
+    this.next = null
+  }
+}
+
+// 创建链表：
+const a = new Node("A")
+const b = new Node("B")
+const c = new Node("C")
+
+a.next = b
+b.next = c
+
+console.log(a)
+
+// 结构：
+A → B → C
+
+```
+
+- 链表常见类型
+
+```
+1: 单链表（Singly Linked List）只有 next。
+
+A → B → C → D
+
+2: 双向链表（Doubly Linked List）, 节点：prev,next
+
+A ⇄ B ⇄ C ⇄ D
+
+3: 循环链表（Circular Linked List）
+A → B → C
+↑       ↓
+└───────┘
+```
+
+## 为什么 React Fiber用链表
+
+可以随时暂停遍历, 不依赖递归调用栈, 方便实现可中断渲染
+
+```
+App
+ ↓ child
+Header
+ ↓ sibling
+Main
+ ↓ sibling
+Footer
+```
+
+
+## React Fiber 架构
+
+React Fiber 架构是 React 从 v16 开始引入的一套新的协调（reconciliation）架构，主要解决旧架构在大型应用中 渲染阻塞、无法中断、页面卡顿的问题。
+
+在 React 16 之前，React 使用的是：Stack Reconciler，React 更新组件树时会 一次性递归执行完所有 diff。如果组件树很大：就会导致：掉帧
+
+Fiber 的目标是：把一次长任务拆成多个小任务，允许：暂停，恢复，优先级调度
+
+## next路由有哪些
+
+Pages Router（传统路由）：Next.js 13 之前的主要路由方式。
+
+- 1 静态路由：文件名就是路径。
+
+- 2 动态路由：通过文件名生成路由。使用 [param]
+
+pages/post/[id].tsx
+
+- 3 catch-all 路由
+```
+pages/docs/[...slug].tsx
+
+可以匹配：
+/docs/a
+/docs/a/b
+/docs/a/b/c
+
+返回: 
+['a','b','c']
+
+
+
+```
+
+Pages Router 在大型应用中存在一些架构限制，比如布局复用困难、数据获取方式复杂、以及无法很好支持 React Server Components。
+
+- App Router 的核心
+
+因此 Next.js 在 13 版本推出了 App Router，它引入了 Server Components、Nested Layout、Streaming Rendering 等能力，使得数据获取更加简单，同时减少客户端 JS 体积，提高页面性能和开发体验。
+
+- 1 支持 Server Components（最大变化）
+
+```js
+// 不会打包到浏览器, JS 体积更小, 更快
+export default async function Page() {
+  const data = await fetch("https://api.com/data")
+
+  return <div>{data.title}</div>
+}
+```
+
+- 2 真正的嵌套路由 + Layout
+
+```
+app/
+ ├ dashboard/
+ │   ├ layout.js
+ │   ├ page.js
+ │   ├ settings/page.js
+ │   └ users/page.js
+```
+
+- 3 更简单的数据获取
+
+```js
+async function getData() {
+  const res = await fetch("https://api.com")
+  return res.json()
+}
+```
+
+- 4 Streaming（渐进渲染）
+
+```
+以前页面必须：
+
+数据全部加载完
+↓
+再返回 HTML
+
+现在：
+Header 先渲染
+↓
+内容慢慢加载
+```
+
+- 5 更强的路由能力
+
+| 功能                  | 作用       |
+| ------------------- | -------- |
+| Layout              | 共享布局     |
+| Route Groups        | 路由分组     |
+| Parallel Routes     | 并行渲染     |
+| Intercepting Routes | Modal 路由 |
+
+
 ## 什么事MCP
 MCP 通常指 Model Context Protocol，是 AI 领域最近很火的一个协议。
 MCP 是让 AI 可以像插件一样调用工具、访问数据的一种标准协议。
@@ -613,12 +843,12 @@ Compilation 模块会被 Compiler 用来创建新的 compilation 对象（或新
 
 - 1. 选择正确的渲染策略
 
-| 渲染方式 | 作用     |
-| ---- | ------ |
-| CSR  | 客户端渲染  |
-| SSR  | 服务端渲染  |
-| SSG  | 静态生成   |
-| ISR  | 增量静态生成 |
+| 渲染方式 | 作用     | 使用场景 |
+| ---- | ------ | ------ |
+| CSR  | 客户端渲染  | 浏览器渲染页面,动态交互或私有页面 |
+| SSR  | 服务端渲染  | 每次请求生成 HTML,实时数据、个性化页面 |
+| SSG  | 静态生成   | 构建时生成 HTML,内容静态、不常 |
+| ISR  | 增量静态生成 | SSG + 定时刷新 内容偶尔更新 |
 
 
 - 2. 代码分割
