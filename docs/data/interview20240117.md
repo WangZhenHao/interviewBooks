@@ -133,11 +133,81 @@ display:none 会触发回流，而 visibility:hidden 只会触发重绘。
 <img src="./img/1.jpg"  />
 </p>
 
+## webpack生命周期
+
+- 1.初始化（Initialization）
+   读取配置文件（webpack.config.js）
+   合并 CLI 参数
+   创建 Compiler 实例
+   加载插件（plugins.apply）
+
+- 2.开始编译（Compilation Start）
+  compiler.run()
+  正式进入构建流程
+
+- 3.模块构建（Build Modules）
+   读取文件内容
+   调用 loader（从右往左）
+   转成 AST，分析依赖
+形成模块依赖图（Dependency Graph）
+
+```js
+const EntryPlugin = require("webpack/lib/EntryPlugin");
+
+module.exports = class FileEntryPlugin {
+    apply(compiler) {
+        this.compiler = compiler;
+        this.resolver = createResolver(compiler);
+
+        this.compiler.hooks.entryOption.tap(
+            "FileEntryPlugin",
+            this.entryOption.bind(this)
+        );
+        compiler.hooks.beforeCompile.tapAsync(
+            "FileEntryPlugin",
+            this.beforeCompile.bind(this)
+        );
+        // this.compiler.hooks.compilation.tap('FileEntryPlugin', this.setCompilation.bind(this))
+        this.compiler.hooks.watchRun.tapAsync(
+            "FileEntryPlugin",
+            this.fileChange.bind(this)
+        );
+
+        this.compiler.hooks.emit.tap('FileEntryPlugin', this.setEmitHook.bind(this))
+    }
+    addEntry(entry, name) {
+        if (!this.chunkMap.get(entry)) {
+            const tips = name ? name : CHUNKNAME + this.chunNameIndex;
+            this.chunkMap.set(entry, tips);
+
+            new EntryPlugin(this.context, entry, {
+                name: tips,
+            }).apply(this.compiler);
+
+            this.chunkNames.push(CHUNKNAME + this.chunNameIndex + ".js");
+            this.chunNameIndex++;
+        }
+    }
+}
+```
+
+
+- 4.生成资源（Chunk & Bundle）
+  Webpack 会把模块打包成 chunk
+
+- 5.输出文件（Emit）
+  把 bundle 写入磁盘：
+
+- 6.构建结束（Done）
+  整个生命周期结束
+
 ## 说说compiler和compilation
 
 Compiler 是webpack的主要引擎，可以创建一个compilation。Compiler他是继承Tapable类，是为了注册和调用插件。大多数面向用户的插件会首先在Compiler上注册。
 
 Compilation 模块会被 Compiler 用来创建新的 compilation 对象（或新的 build 对象）。 compilation 实例能够访问所有的模块和它们的依赖（大部分是循环依赖）。 它会对应用程序的依赖图中所有模块， 进行字面上的编译(literal compilation)。 在编译阶段，模块会被加载(load)、封存(seal)、优化(optimize)、 分块(chunk)、哈希(hash)和重新创建(restore)。
+
+
 
 
 ## 说说webpack 是如何tree Shaking的
